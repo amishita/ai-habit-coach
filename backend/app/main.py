@@ -1,9 +1,7 @@
-# NOTE:
-# Current storage is in-memory (habit_store list).
-# Next step: replace with MongoDB for persistence.
-
 from fastapi import FastAPI, HTTPException
 from app.schemas.habit import HabitLog
+from app.core.database import client
+
 
 habit_store = []
 
@@ -40,3 +38,9 @@ def get_habits_by_date(date: str):
         status_code=404,
         detail="Habit not found for the given date"
     )
+
+
+@app.get("/db-check")
+async def db_check():
+    await client.admin.command("ping")
+    return {"status": "MongoDB connected"}
