@@ -3,11 +3,20 @@ from fastapi import FastAPI, HTTPException
 from app.schemas.habit import HabitLog
 # database client and db instance
 from app.core.database import client, db
-
-habit_store = []
+# CORS middleware to handle cross-origin requests
+from fastapi.middleware.cors import CORSMiddleware
 
 # creates the FastAPI application object receive HTTP requests, route them, validate data, send responses.
 app = FastAPI(title="AI Habit Coach API")
+
+# configure CORS middleware to allow requests from the frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 habits_collection = db["habits"]
 
